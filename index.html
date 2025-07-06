@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Codex</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #000;
+      --bg2: #111;
+      --text: #fff;
+      --border: #333;
+      --hover: #222;
+      --button: #fff;
+      --buttonText: #000;
+    }
+
+    body.light {
+      --bg: #fff;
+      --bg2: #f5f5f5;
+      --text: #000;
+      --border: #ccc;
+      --hover: #eee;
+      --button: #000;
+      --buttonText: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background-color: var(--bg2);
+      padding: 20px 30px;
+      font-size: 32px;
+      font-weight: bold;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .main {
+      display: flex;
+      height: calc(100vh - 70px);
+    }
+
+    .sidebar {
+      width: 240px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+    }
+
+    .sidebar input {
+      width: 100%;
+      padding: 10px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      padding: 12px 10px;
+      margin-bottom: 10px;
+      background: var(--hover);
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .sidebar li:hover {
+      background: var(--border);
+    }
+
+    .content-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+    }
+
+    .descargas {
+      width: 300px;
+      background: var(--bg2);
+      padding: 25px;
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+    }
+
+    .lista, .configuracion {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .lista.activa, .configuracion.activa {
+      display: block;
+    }
+
+    .lista h3, .configuracion h3 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      font-size: 24px;
+    }
+
+    .item {
+      padding: 14px 20px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      cursor: pointer;
+    }
+
+    .item:hover {
+      background-color: var(--hover);
+    }
+
+    .descargas h4 {
+      margin: 0 0 15px;
+      font-size: 22px;
+    }
+
+    .descargas button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      border: none;
+      background: var(--button);
+      color: var(--buttonText);
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .descargas button:hover {
+      opacity: 0.8;
+    }
+
+    .configuracion label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1024px) {
+      .descargas {
+        width: 250px;
+        padding: 15px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .content-container {
+        flex-direction: column;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .descargas {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body onload="aplicarModoGuardado()">
+
+<header>Codex</header>
+<div class="main">
+  <div class="sidebar">
+    <input type="text" id="buscador" placeholder="Buscar juegos..." onkeyup="filtrarItems()" />
+    <ul>
+      <li onclick="mostrarSeccion('juegos')">Juegos</li>
+      <li onclick="mostrarSeccion('programas')">Programas</li>
+      <li onclick="mostrarSeccion('configuracion')">Configuración</li>
+    </ul>
+  </div>
+
+  <div class="content-container">
+    <div class="content">
+      <div class="lista activa" id="juegos">
+        <h3>Juegos disponibles</h3>
+
+        <div class="item" onclick="mostrarDescarga('GTA V', 'https://docs.google.com/document/d/1csXoRtvw1v5d70B9_CpGyaurss173Y9RphnOwGOIwD8/mobilebasic', 'https://gofile.io/d/5vJjhE')">
+          GTA V (Optimizado)
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Project Zomboid Legacy', 'https://www.mediafire.com/file/hf0wy1ho6baz0f5', '')">
+          Project Zomboid Legacy (V0.32)
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('GTA Vice City', 'https://www.mediafire.com/file/r0x4wcpf0tqiy7v', 'https://gofile.io/d/5sXbyy')">
+          GTA Vice City
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Payday 2', '', 'https://gofile.io/d/payday2')">
+          Payday 2
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Subnautica', 'https://www.mediafire.com/file/b5hvooqn6nh7r0i/Subnautica+Opti+V2.7z/file', '')">
+          Subnautica
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Red Dead Redemption 2', '', 'https://gofile.io/d/GkaibH')">
+          Red Dead Redemption 1 Con (Optimizaciones Incluidas)
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Red Dead Redemption 2', '', 'https://gofile.io/d/5GYOmi')">
+          Red Dead Redemption 2 (Muy pesado 112 GB...)
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Age of Empires II', 'https://www.mediafire.com/file/yyt6ko73gzq2bkx', '')">
+          Age of Empires II
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Slime Rancher', 'https://www.mediafire.com/file/kuwwmmpvlpl2jk9', '')">
+          Slime Rancher
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Farming Simulator', 'https://www.mediafire.com/file/8jx5jlnfzcrrt7w', '')">
+          Farming Simulator
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Portal 1', 'https://gofile.io/d/AufuvS', '')">
+          Portal 1
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Portal 2', 'https://gofile.io/d/3Fh5Ex', '')">
+          Portal 2
+        </div>
+
+        <div class="item" onclick="mostrarOpcionesResidentEvil4()">
+          Resident Evil 4
+        </div>
+      </div>
+
+      <div class="lista" id="programas">
+        <h3>Programas útiles</h3>
+
+        <div class="item" onclick="mostrarDescarga('Photoshop 2022', 'https://www.mediafire.com/file/4mz72e83ymmzrgf', '')">
+          Adobe Photoshop 2022
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Premiere 2017CC', 'https://www.mediafire.com/file/g2typnpiw3il2a8', '')">
+          Adobe Premiere 2017CC
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Vegas Pro 17', 'https://www.mediafire.com/file/tjb4sfcn73rqpag', '')">
+          Vegas Pro 17
+        </div>
+
+        <div class="item" onclick="mostrarDescarga('Capcut 3.8 Pro', 'https://www.mediafire.com/file/tjb4sfcn73rqpag', '')">
+          Capcut 3.8 Pro
+        </div>
+      </div>
+
+      <div class="configuracion" id="configuracion">
+        <h3>Configuración</h3>
+        <label>
+          <input type="checkbox" id="modoToggle" onchange="cambiarModo()">
+          Activar modo claro
+        </label>
+      </div>
+    </div>
+
+    <div class="descargas" id="descargas">
+      <h4 id="titulo-descarga">Selecciona un juego</h4>
+      <div id="descripcion-juego" style="margin-bottom: 15px; font-size: 15px; line-height: 1.6;">
+        Haz clic en cualquier juego o programa para ver las opciones de descarga.
+      </div>
+      <div id="botones-descarga">
+        <button id="btn-mediafire" style="display:none;">MediaFire</button>
+        <button id="btn-gofile" style="display:none;">GoFile</button>
+      </div>
+      <br>
+      <button id="btn-dependencias" style="display:none; background:#007bff; color:white;">Instalador de Dependencias</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function mostrarSeccion(id) {
+  document.querySelectorAll('.lista, .configuracion').forEach(e => e.classList.remove('activa'));
+  const seccion = document.getElementById(id);
+  if (seccion) seccion.classList.add('activa');
+}
+
+function cambiarModo() {
+  const esClaro = document.getElementById("modoToggle").checked;
+  document.body.classList.toggle("light", esClaro);
+  localStorage.setItem("modo-claro", esClaro ? "true" : "false");
+}
+
+function aplicarModoGuardado() {
+  const modoGuardado = localStorage.getItem("modo-claro");
+  const activarClaro = modoGuardado === "true";
+  document.body.classList.toggle("light", activarClaro);
+  const toggle = document.getElementById("modoToggle");
+  if (toggle) toggle.checked = activarClaro;
+  
+  // Mostrar panel de descargas en pantallas grandes
+  if (window.innerWidth > 768) {
+    document.getElementById("descargas").style.display = "block";
+  }
+}
+
+function mostrarDescarga(nombre, linkMediafire, linkGofile) {
+  document.getElementById("titulo-descarga").innerText = `Descargar: ${nombre}`;
+  document.getElementById("descripcion-juego").innerHTML = "";
+  document.getElementById("btn-dependencias").style.display = "none";
+
+  // Configuración especial para GTA V
+  if (nombre === "GTA V") {
+    document.getElementById("descripcion-juego").innerHTML = `
+      <b>GTA V</b> es un juego sacado de OptiJuegos.<br>
+      ⚠️ Puede requerir Visual C++, DirectX, etc.<br>
+      🔧 Usa el <b style="color:#007bff;">Instalador de Dependencias</b> para instalar lo necesario.<br>
+      ❌ No incluye multijugador.
+    `;
+    document.getElementById("btn-dependencias").style.display = "inline-block";
+    document.getElementById("btn-dependencias").onclick = () => window.open("https://www.mediafire.com/file/dependencias", "_blank");
+  }
+
+  // Configuración de botones de descarga
+  const btnMediafire = document.getElementById("btn-mediafire");
+  const btnGofile = document.getElementById("btn-gofile");
+  
+  btnMediafire.style.display = linkMediafire ? "inline-block" : "none";
+  btnGofile.style.display = linkGofile ? "inline-block" : "none";
+  
+  btnMediafire.innerText = "MediaFire";
+  btnGofile.innerText = "GoFile";
+  
+  if (linkMediafire) {
+    btnMediafire.onclick = () => window.open(linkMediafire, '_blank');
+  }
+  if (linkGofile) {
+    btnGofile.onclick = () => window.open(linkGofile, '_blank');
+  }
+
+  // Mostrar panel de descargas (especialmente en móvil)
+  document.getElementById("descargas").style.display = "block";
+}
+
+function mostrarOpcionesResidentEvil4() {
+  document.getElementById("titulo-descarga").innerText = `Descargar: Resident Evil 4`;
+  document.getElementById("descripcion-juego").innerHTML = `
+    Elegí qué versión querés descargar:<br><br>
+    <b>Ultimate HD</b>: versión remasterizada.<br>
+    <b>Versión Vieja</b>: optimizada para PCs antiguos.
+  `;
+
+  const btnMediafire = document.getElementById("btn-mediafire");
+  const btnGofile = document.getElementById("btn-gofile");
+  
+  btnMediafire.style.display = "inline-block";
+  btnMediafire.innerText = "Ultimate HD";
+  btnMediafire.onclick = () => window.open('https://www.mediafire.com/file/bfqbiidln4ff9iq', '_blank');
+
+  btnGofile.style.display = "inline-block";
+  btnGofile.innerText = "Versión Vieja";
+  btnGofile.onclick = () => window.open('https://www.mediafire.com/file/hc38mh3lqbfi0m5', '_blank');
+
+  document.getElementById("btn-dependencias").style.display = "none";
+  document.getElementById("descargas").style.display = "block";
+}
+
+function filtrarItems() {
+  const valor = document.getElementById("buscador").value.toLowerCase();
+  const seccionActiva = document.querySelector(".lista.activa");
+  if (!seccionActiva) return;
+  
+  const items = seccionActiva.querySelectorAll(".item");
+  items.forEach(item => {
+    const texto = item.textContent.toLowerCase();
+    item.style.display = texto.includes(valor) ? "block" : "none";
+  });
+}
+
+// Manejar el responsive del panel de descargas
+window.addEventListener('resize', function() {
+  const descargas = document.getElementById("descargas");
+  if (window.innerWidth <= 768) {
+    // En móvil, ocultar el panel al cambiar de sección
+    mostrarSeccion = function(id) {
+      document.querySelectorAll('.lista, .configuracion').forEach(e => e.classList.remove('activa'));
+      const seccion = document.getElementById(id);
+      if (seccion) seccion.classList.add('activa');
+      descargas.style.display = "none";
+    };
+  } else {
+    // En desktop, mostrar siempre el panel
+    descargas.style.display = "block";
+    mostrarSeccion = function(id) {
+      document.querySelectorAll('.lista, .configuracion').forEach(e => e.classList.remove('activa'));
+      const seccion = document.getElementById(id);
+      if (seccion) seccion.classList.add('activa');
+    };
+  }
+});
+</script>
+</body>
+</html>
